@@ -131,7 +131,7 @@ from openedx.core.djangolib.js_utils import (
 
           <div class="actions">
             <input type="hidden" value="${allow_unicode_course_id}" class="allow-unicode-course-id" />
-            <input type="button" value="${_('Create')}" class="action action-primary new-course-save" ng-click="doCreateCourse()"/>
+            <input type="button" value="${_('Create')}" class="action action-primary delete-new-course-save" ng-click="doCreateCourse()"/>
             <input type="button" value="${_('Cancel')}" class="action action-secondary action-cancel new-course-cancel" />
           </div>
         </form>
@@ -598,13 +598,39 @@ from openedx.core.djangolib.js_utils import (
   %endif
 </div>
 </%block>
-<ajax url="/lms/courseware">
-    <call data-id="DoCreateCourse" data-function="doCreateCourse"/>
-</ajax>
+<div ajax url="/lms/courseware">
+    <input type="hidden" call data-id="DoCreateCourse" data-function="$root.doCreateCourse"/>
+</div>
 <button ng-click="doCreateCourse()"/>
 <%block name="angular">
     <script>
       function onInit(scope){
+        scope.doCreateCourse=function(){
+          var data = $("#create-course-form").serializeArray();
+          scope.$ajax.with("/cms/courseware").call("DoCreateCourseWare",data,function(err,res){
+            if(ret.url){
+              window.location.href = res.url
+            }
+            else {
+              alert('${self.res("Loi")}');
+            }
+            console.log(res);
+          })
+          console.log(scope);
+          // alert("OK");
+        }
+        scope.$applyAsync();
+        // $('form').submit(function (evt) {
+        //      debugger;
+        //     evt.preventDefault();
+        //     window.history.back();
+        //  });
+        // $(".action.action-primary.new-course-save")[0].onclick=function(event){
+        //     debugger;
+        //     console.log(event);
+        //     event.stopPropagation();
+        //     return false;
+        // }
         debugger;
       }
     </script>

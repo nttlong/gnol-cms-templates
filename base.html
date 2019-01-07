@@ -182,10 +182,14 @@ import xdj
     </%block>
     <%include file="widgets/segment-io-footer.html" />
     <div class="modal-cover"></div>
+    <%block name="angular"/>
     <script>
         var mdl = angular.module("cms",[]);
         var ctrl =mdl.controller("cms",["$scope",function($scope){
-          alert($scope.$id);
+          if(window.onInit){
+            window.onInit($scope);
+          }
+          
         }])
     </script>
   </body>

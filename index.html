@@ -608,7 +608,7 @@ from openedx.core.djangolib.js_utils import (
         scope.doCreateCourse=function(){
           var data = $("#create-course-form").serializeArray();
           scope.$ajax.with("/cms/courseware").call("DoCreateCourseWare",data,function(err,res){
-            if(ret.url){
+            if(res.url){
               window.location.href = res.url
             }
             else {

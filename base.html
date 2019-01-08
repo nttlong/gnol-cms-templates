@@ -67,15 +67,7 @@ import xdj
     <script type="text/javascript" src="${static.url(jsi18n_path)}"></script>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="path_prefix" content="${EDX_ROOT_URL}">
-    <script src="/lms/static/client/angular.min.js"></script>
-    <script src="/lms/static/client/ajax.js"></script>
-    <script src="/lms/static/client/ui.js"></script>
-    <script src="/lms/static/client/ui.directtives/ui.qTemplate.js"></script>
-    <script src="/lms/static/client/ui.directtives/ui.service.ajax.js"></script>
-    <script src="/lms/static/client/ui.directtives/ui.drectives.ajax.js"></script>
-    <script src="/lms/static/client/ui.directtives/ui.directitive.ajax.call.js"></script>
-    <script src="/lms/static/client/ui.directtives/ui.services.dialog.js"></script>
-    <script src="/lms/static/client/ui.directtives/ui.bootstrap.layout.js"></script>    
+    
     <%static:css group='style-vendor'/>
     <%static:css group='style-vendor-tinymce-content'/>
     <%static:css group='style-vendor-tinymce-skin'/>
@@ -183,9 +175,12 @@ import xdj
     <%include file="widgets/segment-io-footer.html" />
     <div class="modal-cover"></div>
     <%block name="angular"/>
+    <%include file="xdj-script.html"/>  
     <script>
         var mdl = angular.module("cms",["q-ui"]);
-        var ctrl =mdl.controller("cms",["$ajax","$scope",function($ajax,$scope){
+        var ctrl =mdl.controller("cms",["$compile","$ajax","$scope",function($compile,$ajax,$scope){
+          $scope.$root.$dialog = dialog
+          $scope.$root.$compile=$compile;
           $scope.$ajax = $ajax;
           if(window.onInit){
             window.onInit($scope);

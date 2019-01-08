@@ -32,7 +32,7 @@ from openedx.core.djangolib.js_utils import (
         <li class="nav-item">
           
           % if course_creator_status=='granted':
-          <a href="#new=1" class_old="button new-button new-course-button" class="button new-button new-course-button" onclick="javascript:void(0);"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span>
+          <a  class_old="button new-button new-course-button" class="button new-button" ng-click="$root.$dialog($id).url('/lms/login').done()"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span>
               ${_("New Course")}</a>
           % elif course_creator_status=='disallowed_for_this_site' and settings.FEATURES.get('STUDIO_REQUEST_EMAIL',''):
           <a href="mailto:${settings.FEATURES.get('STUDIO_REQUEST_EMAIL','')}">${_("Email staff to create course")}</a>
@@ -598,13 +598,18 @@ from openedx.core.djangolib.js_utils import (
   %endif
 </div>
 </%block>
-<div ajax url="/lms/courseware">
-    <input type="hidden" call data-id="DoCreateCourse" data-function="$root.doCreateCourse"/>
-</div>
-<button ng-click="doCreateCourse()"/>
+
 <%block name="angular">
-    <script>
+<ajax url="/cms/courseware">
+  <call data-id="DoCreateCourseWare" data-function="doCreateCourse"/>
+</ajax>
+<button ng-click="doCreateCourse()"/>
+    <script id="angular">
       function onInit(scope){
+        console.log(scope);
+        scope.test=function(){
+          alert(scope.$id);
+        }
         scope.doCreateCourse=function(){
           var data = $("#create-course-form").serializeArray();
           scope.$ajax.with("/cms/courseware").call("DoCreateCourseWare",data,function(err,res){
@@ -620,18 +625,7 @@ from openedx.core.djangolib.js_utils import (
           // alert("OK");
         }
         scope.$applyAsync();
-        // $('form').submit(function (evt) {
-        //      debugger;
-        //     evt.preventDefault();
-        //     window.history.back();
-        //  });
-        // $(".action.action-primary.new-course-save")[0].onclick=function(event){
-        //     debugger;
-        //     console.log(event);
-        //     event.stopPropagation();
-        //     return false;
-        // }
-        debugger;
+      
       }
     </script>
 </%block>

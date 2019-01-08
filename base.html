@@ -32,6 +32,7 @@ import xdj
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="openedx-release-line" content="${RELEASE_LINE}" />
+    
     <title>
         <%block name="title"></%block> |
         % if context_course:
@@ -81,6 +82,7 @@ import xdj
     <%include file="widgets/segment-io.html" />
 
     <%block name="header_extras"></%block>
+    <%include file="xdj-script.html"/>  
   </head>
 
   <body class="${static.dir_rtl()} <%block name='bodyclass'></%block> lang_${LANGUAGE_CODE}" ng-controller="cms">
@@ -175,7 +177,7 @@ import xdj
     <%include file="widgets/segment-io-footer.html" />
     <div class="modal-cover"></div>
     <%block name="angular"/>
-    <%include file="xdj-script.html"/>  
+    <script src="/cms/static/bootstrap.js"></script>
     <script>
         var mdl = angular.module("cms",["q-ui"]);
         var ctrl =mdl.controller("cms",["$compile","$ajax","$scope",function($compile,$ajax,$scope){

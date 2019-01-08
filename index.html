@@ -32,7 +32,8 @@ from openedx.core.djangolib.js_utils import (
         <li class="nav-item">
           
           % if course_creator_status=='granted':
-          <a  class_old="button new-button new-course-button" class="button new-button" ng-click="$root.$dialog($id).url('/lms/login').done()"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span>
+         
+          <a  class_old="button new-button new-course-button" class="button new-button" ng-click="$root.$dialog($id).url($root.url_new_course).done()"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span>
               ${_("New Course")}</a>
           % elif course_creator_status=='disallowed_for_this_site' and settings.FEATURES.get('STUDIO_REQUEST_EMAIL',''):
           <a href="mailto:${settings.FEATURES.get('STUDIO_REQUEST_EMAIL','')}">${_("Email staff to create course")}</a>
@@ -41,6 +42,9 @@ from openedx.core.djangolib.js_utils import (
             <a href="#" class="button new-button new-library-button"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span>
             ${_("New Library")}</a>
           % endif
+          <a  class="button new-button" ng-click="$root.$dialog($id).url($root.url_list_of_subject).done()"><span class="icon fa fa-plus icon-inline" aria-hidden="true"></span>
+            ${self.res("Categories")}
+          </a>
         </li>
       </ul>
     </nav>
@@ -224,6 +228,7 @@ from openedx.core.djangolib.js_utils import (
 
           <ul class="list-courses">
             %for course_info in sorted(in_process_course_actions, key=lambda s: s['display_name'].lower() if s['display_name'] is not None else ''):
+            
             <!-- STATE: re-run is processing -->
             %if course_info['is_in_progress']:
             <li class="wrapper-course has-status" data-course-key="${course_info['course_key']}">
@@ -336,8 +341,8 @@ from openedx.core.djangolib.js_utils import (
       % endif
 
       %if len(courses) > 0 or optimization_enabled:
-      <div class="courses courses-tab react-course-listing active">
-        ${static.renderReact(
+      <div class="courses courses-tab react-course-listing active" ng-init="doGetListOfCourseWares()">
+        <!-- ${static.renderReact(
           component="CourseOrLibraryListing",
           id="react-course-listing",
           props={
@@ -346,7 +351,9 @@ from openedx.core.djangolib.js_utils import (
             'idBase': 'course',
             'allowReruns': allow_course_reruns and rerun_creator_status and course_creator_status=='granted'
           }
-        )}
+        )} -->
+        {{courses}}
+        <input type="button" ng-click="doGetListOfCourseWares()" value="test">
       </div>
 
       %else:
@@ -481,7 +488,7 @@ from openedx.core.djangolib.js_utils import (
 
       %if len(libraries) > 0 or optimization_enabled:
       <div class="libraries react-library-listing libraries-tab">
-        ${static.renderReact(
+        <!-- ${static.renderReact(
           component="CourseOrLibraryListing",
           id="react-library-listing",
           props={
@@ -490,7 +497,8 @@ from openedx.core.djangolib.js_utils import (
             'idBase': 'library',
             'allowReruns': allow_course_reruns and rerun_creator_status and course_creator_status=='granted'
           }
-        )}
+        )} -->
+        
       </div>
 
       %else:
@@ -602,11 +610,16 @@ from openedx.core.djangolib.js_utils import (
 <%block name="angular">
 <ajax url="/cms/courseware">
   <call data-id="DoCreateCourseWare" data-function="doCreateCourse"/>
+  
 </ajax>
-<button ng-click="doCreateCourse()"/>
+<ajax url="/cms/home">
+  <call data-id="GetListOfCourseWares" data-function-x="doGetListOfCourseWares" ng-model="courses"/>
+</ajax>
+
     <script id="angular">
       function onInit(scope){
-        console.log(scope);
+        scope.$root.url_new_course ="/cms/courseware";
+        scope.$root.url_list_of_subject="/cms/subjects"
         scope.test=function(){
           alert(scope.$id);
         }

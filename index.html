@@ -341,7 +341,9 @@ from openedx.core.djangolib.js_utils import (
       % endif
 
       %if len(courses) > 0 or optimization_enabled:
-      <div class="courses courses-tab react-course-listing active" ng-init="doGetListOfCourseWares()">
+      <div class="courses courses-tab react-course-listing active">
+        <span>&nbsp;</span>
+        <div  q-template url="/cms/courseware/list"></div>
         <!-- ${static.renderReact(
           component="CourseOrLibraryListing",
           id="react-course-listing",
@@ -352,8 +354,7 @@ from openedx.core.djangolib.js_utils import (
             'allowReruns': allow_course_reruns and rerun_creator_status and course_creator_status=='granted'
           }
         )} -->
-        {{courses}}
-        <input type="button" ng-click="doGetListOfCourseWares()" value="test">
+       
       </div>
 
       %else:
@@ -608,35 +609,33 @@ from openedx.core.djangolib.js_utils import (
 </%block>
 
 <%block name="angular">
-<ajax url="/cms/courseware">
+<!-- <ajax url="/cms/courseware">
   <call data-id="DoCreateCourseWare" data-function="doCreateCourse"/>
   
 </ajax>
 <ajax url="/cms/home">
-  <call data-id="GetListOfCourseWares" data-function-x="doGetListOfCourseWares" ng-model="courses"/>
-</ajax>
+  <call data-id="GetListOfCourseWares" ng-model="courses"/>
+  <call data-id="GetListOfCourseWares1" data-function="doGetListOfCourseWares" ng-model="courses"/>
+</ajax> -->
 
     <script id="angular">
       function onInit(scope){
         scope.$root.url_new_course ="/cms/courseware";
         scope.$root.url_list_of_subject="/cms/subjects"
-        scope.test=function(){
-          alert(scope.$id);
-        }
-        scope.doCreateCourse=function(){
-          var data = $("#create-course-form").serializeArray();
-          scope.$ajax.with("/cms/courseware").call("DoCreateCourseWare",data,function(err,res){
-            if(res.url){
-              window.location.href = res.url
-            }
-            else {
-              alert('${self.res("Loi")}');
-            }
-            console.log(res);
-          })
-          console.log(scope);
-          // alert("OK");
-        }
+        // scope.doCreateCourse=function(){
+        //   var data = $("#create-course-form").serializeArray();
+        //   scope.$ajax.with("/cms/courseware").call("DoCreateCourseWare",data,function(err,res){
+        //     if(res.url){
+        //       window.location.href = res.url
+        //     }
+        //     else {
+        //       alert('${self.res("Loi")}');
+        //     }
+        //     console.log(res);
+        //   })
+        //   console.log(scope);
+        //   // alert("OK");
+        // }
         scope.$applyAsync();
       
       }

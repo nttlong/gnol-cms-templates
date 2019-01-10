@@ -177,13 +177,17 @@ import xdj
     <%include file="widgets/segment-io-footer.html" />
     <div class="modal-cover"></div>
     <%block name="angular"/>
-    <script src="/cms/static/bootstrap.js"></script>
+    <%include file="xdj-vendor.html"/>
+  
     <script>
         var mdl = angular.module("cms",["q-ui"]);
-        var ctrl =mdl.controller("cms",["$compile","$ajax","$scope",function($compile,$ajax,$scope){
+        var ctrl =mdl.controller("cms",["$msgError","$compile","$ajax","$scope",function($msgError,$compile,$ajax,$scope){
+          
           $scope.$root.$dialog = dialog
           $scope.$root.$compile=$compile;
           $scope.$ajax = $ajax;
+          $scope.$root.$msgError=$msgError
+          console.log($scope.$root);
           if(window.onInit){
             window.onInit($scope);
           }

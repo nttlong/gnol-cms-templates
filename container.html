@@ -189,3 +189,40 @@ from openedx.core.djangolib.markup import HTML, Text
     </div>
 </div>
 </%block>
+
+<%block name="angular">
+    
+    <script id="angular">
+      function onInit(scope){
+        var watchLibIds={}
+        function wacthLibrabry(){
+            if($("select.input.setting-input[name='Library']").length>0){
+                var ele=$("select.input.setting-input[name='Library']")[0]
+                
+                if(!watchLibIds[$(ele).attr("id")]){
+                    watchLibIds[$(ele).attr("id")]=ele;
+                    // $(ele).hide();
+                    // while(ele.options.length>0){ele.options.remove(0);}
+                    var btn=$("<input type='buttion' class='btn btn-default' value=\"${self.res('Select library')}\" readonly='readonly'/>");
+                    btn.val($(ele).val())
+                    btn.insertAfter(ele);
+                    var metaData=$(ele).parents(".wrapper-comp-settings metadata_edit.is-active")[0];
+                    
+                    // ele.remove();
+                    btn.on("click",function(){
+                        scope.$root.$dialog(scope.$id).params({cbo:ele,btn:btn,metaData:metaData}).url('/cms/library/selector').done();
+
+                    });
+                    console.log($(ele));
+                }
+                
+            }
+            setTimeout(wacthLibrabry,100);
+            
+        }
+        wacthLibrabry();
+
+        //alert($("select.input.setting-input[name='Library']").length);
+    }
+    </script>
+</%block>
